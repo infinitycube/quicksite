@@ -1,6 +1,6 @@
 {
-  "name": "quicksite",
-  "description": "A Slim 4 scaffolding for creating web applications. QuickSite creates a project structure with all essential packages pre-bundled.",
+  "name": "infinitycube/quicksite",
+  "description": "Slim 4 scaffolding for creating web applications. QuickSite creates a project structure with all essential packages pre-bundled.",
   "type": "project",
   "keywords": [
     "slim",
