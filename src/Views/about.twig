@@ -1,0 +1,25 @@
+{% extends "template/main.twig" %}
+{% block title %}
+About Quicksite
+{% endblock %}
+{% block content %}
+<div class="container py-3">
+    <h3>
+        About QuickSite
+    </h3>
+    <p>
+    QuickSite let you focus on the application development as it takes care of all other things like database, view rendering etc. The scaffolding creates a project structure with an example application for your reference. A powerful view render engine, Twig helps you create awesome templates to render pages. It also has a Database Abstraction Layer (DABL) from Doctrine, your application need not directly interact with the database.
+    </p>
+    <ul>
+        <li><a href="https://github.com/infinitycube/quicksite/wiki/Setup" target="_blank">Setup Project</a></li>
+        <li><a href="https://github.com/infinitycube/quicksite/wiki/Development" target="_blank">Development</a></li>
+        <li><a href="https://github.com/infinitycube/quicksite/wiki/Twig" target="_blank">Using Twig Templates</a></li>
+        <li><a href="https://github.com/infinitycube/quicksite/wiki/Doctrine" target="_blank">Using Doctrine ORM</a></li>
+        <li><a href="https://github.com/infinitycube/quicksite/wiki/Migrations" target="_blank">Using Doctrine Migrations</a></li>
+        <li><a href="https://github.com/infinitycube/quicksite/wiki/Sessions" target="_blank">Using Sessions</a></li>
+    </ul>
+    <pre>
+Last accessed this page at {{lastAccessed}} (Stored in session)
+    </pre>
+</div>
+{% endblock %}

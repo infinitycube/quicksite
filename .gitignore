@@ -1,0 +1,16 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Composer
+composer.phar
+/vendor/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# PHP Unit Test Cache
+.phpunit.result.cache

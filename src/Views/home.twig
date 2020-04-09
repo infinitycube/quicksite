@@ -1,0 +1,69 @@
+{% extends "template/main.twig" %}
+{% block title %}
+Welcome to Quicksite
+{% endblock %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Slim 4 Scaffolding</h1>
+    <p class="lead">QuickSite have all essential components to start your web application project</p>
+  </div>
+</div>
+<div class="container py-3">
+  <div class="row mb-3">
+    <div class="col">
+    <p class="font-italic">A Slim 4 scaffolding for creating web applications at lightning speed.</p>
+    <p>
+      QuickSite let you focus on the application development as it takes care of all other things like database, view rendering etc. The scaffolding creates a project structure with an example application for your reference. A powerful view render engine, Twig helps you create awesome templates to render pages. It also has a Database Abstraction Layer (DABL) from Doctrine, your application need not directly interact with the database.
+    </p>
+    <h4>Featured Components</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&h=250&q=80" class="card-img-top" alt="Twig">
+        <div class="card-body">
+          <h5 class="card-title">Twig</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Template Engine</h6>
+          <p class="card-text">The flexible, fast, and secure template engine for PHP. Twig compiles templates down to plain optimized PHP code. The overhead compared to regular PHP code was reduced to the very minimum.</p>
+          <a href="https://twig.symfony.com/" target="_blank" class="card-link">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1501139083538-0139583c060f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&h=250&q=80" class="card-img-top" alt="Slim-Session">
+        <div class="card-body">
+          <h5 class="card-title">Slim-Session</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Middleware</h6>
+          <p class="card-text">Simple middleware for Slim Framework 4, that allows managing PHP built-in sessions and includes a Helper class to help you with the <code>$_SESSION</code> superglobal.</p>
+          <a href="https://github.com/bryanjhv/slim-session" target="_blank" class="card-link">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1529473814998-077b4fec6770?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&h=250&q=80" class="card-img-top" alt="Doctrine ORM">
+        <div class="card-body">
+          <h5 class="card-title">Doctrine ORM</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Object Relational Mapper</h6>
+          <p class="card-text">PHP object relational mapper (ORM) that sits on top of a powerful database abstraction layer (DBAL). One of its key features is the option to write database queries in a proprietary object oriented SQL dialect called Doctrine Query Language (DQL). This provides developers with a powerful alternative to SQL that maintains flexibility without requiring unnecessary code duplication.</p>
+          <a href="https://www.doctrine-project.org/projects/orm.html" target="_blank" class="card-link">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&h=250&q=80" class="card-img-top" alt="Doctrine Migrations">
+        <div class="card-body">
+          <h5 class="card-title">Doctrine Migrations</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Schema Versioning</h6>
+          <p class="card-text">PHP Doctrine Migrations project offer additional functionality on top of the database abstraction layer (DBAL) for versioning your database schema and easily deploying changes to it. It is a very easy to use and a powerful tool.</p>
+          <a href="https://www.doctrine-project.org/projects/migrations.html" target="_blank" class="card-link">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

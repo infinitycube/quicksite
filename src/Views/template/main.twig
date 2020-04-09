@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+        footer{
+            font-size:0.8rem;
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+           <a class="navbar-brand mb-0 h1" href="/"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDE4NS45MiA1Ni4wNCI+DQo8cGF0aCBmaWxsPSIjM0JBQTM1IiBkPSJNMjkuNTcsNTMuNzNoLTIuN1YzNy4xNWgtMC4xMmMtMi4yOCwzLjU0LTYuNDIsNS40LTEwLjY4LDUuNGMtOC4zNCwwLTEzLjU2LTYuMTItMTMuNTYtMTQuMTYgIGMwLTguMTYsNS4yMi0xNC43NiwxMy42OC0xNC43NmM0LjA4LDAsOC41MiwyLjA0LDEwLjU2LDUuNThoMC4xMnYtNC45OGgyLjdWNTMuNzN6IE01LjIxLDI4LjY5YzAsNi40OCw0LjM4LDExLjM0LDExLjA0LDExLjM0ICBjNi40OCwwLDEwLjgtNS40NiwxMC44LTExLjY0YzAtNi4zNi00LjE0LTEyLjI0LTEwLjkyLTEyLjI0QzkuMDUsMTYuMTUsNS4yMSwyMi4wMyw1LjIxLDI4LjY5eiIvPg0KPHBhdGggZmlsbD0iIzNCQUEzNSIgZD0iTTUzLjU4LDE0LjIzdjE2LjYyYzAsMi44MiwwLjA2LDUuNjQtMS42OCw3Ljk4Yy0xLjkyLDIuNTItNS4xNiwzLjcyLTguMjgsMy43MmMtMy4xMiwwLTYuMzYtMS4yLTguMjgtMy43MiAgYy0xLjc0LTIuMzQtMS42OC01LjE2LTEuNjgtNy45OFYxNC4yM2gyLjd2MTUuNjZjMCw1LjM0LDAuNiwxMC4xNCw3LjI2LDEwLjE0YzYuNjYsMCw3LjI2LTQuOCw3LjI2LTEwLjE0VjE0LjIzSDUzLjU4eiIvPg0KPHBhdGggZmlsbD0iIzNCQUEzNSIgZD0iTTYwLjM3LDQxLjk1aC0yLjdWMTMuOThoMi43VjQxLjk1eiIvPg0KPHBhdGggZmlsbD0iIzNCQUEzNSIgZD0iTTg4LjIxLDIwLjY1Yy0yLjY0LTIuODgtNS44Mi00LjUtOS43OC00LjVjLTYuNTQsMC0xMS40Niw1LjU4LTExLjQ2LDExLjg4czQuODYsMTIsMTEuNCwxMiAgYzMuOTYsMCw3LjY4LTEuOTIsMTAuMi00Ljk4djMuNjZjLTIuODIsMi40Ni02LjM2LDMuODQtMTAuMDgsMy44NGMtOC4yMiwwLTE0LjIyLTYuNDItMTQuMjItMTQuNTJjMC04LjA0LDYuMTItMTQuNCwxNC4yOC0xNC40ICBjMy42LDAsNi45LDEuMDgsOS42NiwzLjQyVjIwLjY1eiIvPg0KPHBhdGggZmlsbD0iIzNCQUEzNSIgZD0iTTk1LjI5LDI1Ljk5bDExLjQtMTEuNzZoMy40OGwtMTEuNjQsMTJsMTUuNTQsMTUuNzJoLTMuNTRMOTYuNzksMjguMDlsLTEuNSwxLjU2djEyLjNoLTIuN1YyLjQ1aDIuN1YyNS45OXogICIvPg0KPHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTEyOS4wNCwxOC44OWMtMC45Mi0xLjk1LTIuNzUtMy4xNy00Ljk0LTMuMTdjLTIuMzgsMC00LjgyLDEuOTUtNC44Miw0LjM5YzAsNi43NywxMy43MywzLjQ4LDEzLjczLDEzLjY3ICBjMCw1LjE5LTQuMDMsOC43OC05LjA5LDguNzhjLTQuNywwLTguNTQtMi44Ny05LjctNy40NGwyLjY4LTAuODVjMS4wNCwzLjM1LDMuMjksNS43Myw3LjAyLDUuNzNjMy41NCwwLDYuMzQtMi44MSw2LjM0LTYuMzQgIGMwLTMuNDgtMi42OC00LjU4LTUuNDktNS41NWMtMy44NC0xLjQtOC4yNC0zLjA1LTguMjQtNy44MWMwLTQuMjcsMy42LTcuMTQsNy42OS03LjE0YzIuODcsMCw1Ljk4LDEuODksNy4yLDQuNTFMMTI5LjA0LDE4Ljg5eiIvPg0KPHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTEzOS44NCw0MS45NWgtMi43NVYxMy43N2gyLjc1VjQxLjk1eiIvPg0KPHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTE0OS43OSw0MS45NWgtMi43NVYxNi4zM2gtMy4xMXYtMi41NmgzLjExVjMuN2gyLjc1djEwLjA3aDQuOTR2Mi41NmgtNC45NFY0MS45NXoiLz4NCjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0xNTcuNTcsMjguMWMtMC4xOCw3LjE0LDQuNzYsMTEuOSwxMS4yOSwxMS45YzQuMzksMCw3LjkzLTIuNjIsOS45NC02LjQxbDIuMzIsMS4zNCAgYy0yLjU2LDQuODgtNy4wOCw3LjYzLTEyLjYzLDcuNjNjLTguMzYsMC0xMy42Ny02Ljc3LTEzLjY3LTE0Ljc2YzAtNy44Nyw1LjQzLTE0LjY0LDEzLjY3LTE0LjY0YzguNTQsMCwxMy42LDYuODMsMTMuNTQsMTQuOTUgIEgxNTcuNTd6IE0xNzkuMjksMjUuNTRjLTAuNjctNS4xOS00Ljk0LTkuODItMTAuNzQtOS44MmMtNS43MywwLTEwLjQ5LDQuNTEtMTAuOTgsOS44MkgxNzkuMjl6Ii8+DQo8cG9seWdvbiBmaWxsPSIjM0JBQTM1IiBwb2ludHM9IjIzLjg3LDI4LjM5IDE0Ljg3LDIzLjkgMTQuODcsMjYuNjMgOS40LDIzLjkgOS40LDMyLjg5IDE0Ljg3LDMwLjE1IDE0Ljg3LDMyLjg5ICIvPg0KPC9zdmc+" alt="QuickSite" width="80"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+           <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item{% if route == 'home' %} active{% endif %}">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item{% if route == 'about' %} active{% endif %}">
+                        <a class="nav-link" href="/about/">About</a>
+                    </li>
+                    <li class="nav-item{% if route == 'todo' %} active{% endif %}">
+                        <a class="nav-link" href="/todo/">Todo</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="navbar navbr-bottom bg-light mt-3">
+        <div class="container justify-content-center">
+               <p class="my-0">QuickSite is built around <a href="https://www.slimframework.com/" target="_blank">Slim 4 Framework</a></p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
