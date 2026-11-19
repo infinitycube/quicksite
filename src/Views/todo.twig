@@ -3,79 +3,33 @@
 Todo - The Example
 {% endblock %}
 {% block head %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <style type="text/css">
-    .noselect {
-        user-select: none; 
+    [v-cloak] {
+        display: none;
     }
-    .toast {
-        width:70%;
-    }
-    .loader {
-        display: inline-block;
-        width: 2rem;
-        height: 2rem;
-        vertical-align: text-bottom;
-        background-color: currentColor;
-        transform: scale(0);
-        opacity:0;
-        border-radius: 50%;
-        -webkit-animation: loader .5s linear alternate infinite;
-        animation: loader .5s linear alternate infinite;
-    }
-
-    @keyframes loader {
-        0% {
-            transform: scale(0);
-            opacity:0
-        }
-        100%{
-            transform: scale(0.5);
-            opacity:1;
-        }
-    }
-    .delay-1{
-        animation-delay:0.1s
-    }
-    .delay-2{
-        animation-delay:0.2s
-    }
-    .delay-3{
-        animation-delay:0.3s
+    .todo-card {
+        position: relative;
     }
     .loading {
-        position:absolute;
-        width:100%;
-        height:100%;
-        background-color:rgba(255,255,255,0.4);
-        display:flex;
-        align-items:center;
-        justify-content:center;
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.6);
     }
-    .todoList {
-        list-style:none;
-        padding-left:0;
+    .todo-item.complete {
+        background-color: var(--bs-success-bg-subtle);
     }
-    .todoList li {
-        padding:0.3rem 0.6rem;
-        cursor:pointer;
-        display:flex;
+    .todo-item.complete .form-check-label {
+        text-decoration: line-through;
+        color: var(--bs-secondary-color);
     }
-    .todoList li span.icon-left{
-        color:#05ba20;
-        padding-right:0.6rem;
-    }
-    .todoList li span.label{
-        width:100%;
-    }
-    .todoList li span.action{
-        padding-left:0.4rem;
-    }
-    .todoList li.incomplete {
-        background-color:#f7f8f9;
-    }
-    .todoList li.complete {
-        background-color:#eaf9f4;
+    .todo-item .form-check-label {
+        cursor: pointer;
+        user-select: none;
+        word-break: break-word;
     }
 </style>
 {% endblock %}
@@ -83,211 +37,210 @@ Todo - The Example
 <div class="container py-3">
     <h2>Todo - The Example App</h2>
     <p>
-        This vue.js Todo app is an example CRUD system that utilizes API routes in the back end which implements Doctrine ORM underneath. Add or remove Todo items or double-click any item to toggle its complete status. You may find more about using any pre-bundled packages within this scaffolding in the <a href="https://github.com/infinitycube/quicksite/wiki" target="_blank">QuickSite Documentation</a>.
+        This Vue.js Todo app is an example CRUD system that utilizes API routes in the back end which implements Doctrine ORM underneath. Add or remove Todo items, or tick any item to toggle its complete status. You may find more about using any pre-bundled packages within this scaffolding in the <a href="https://github.com/infinitycube/quicksite/wiki" target="_blank" rel="noopener">QuickSite Documentation</a>.
     </p>
 </div>
+{#
+    The Vue template below uses {{ }} just like Twig does.
+    {% verbatim %} tells Twig to output it untouched so Vue can render it in the browser.
+#}
+{% verbatim %}
 <div class="container py-3">
-    <div class="row justify-content-center m-3">
-        <div class="col-md-5">
-            <div id="app">
-                <div class="loading" v-show="confirm">
-                    <div class="toast" id="alert-confirm" role="alert" aria-live="assertive" aria-atomic="true"  data-autohide="false">
-                        <div class="toast-header">
-                            <i class="fa fa-list-ul" aria-hidden="true"></i>
-                            <strong class="mr-auto pl-2">Todo</strong>
-                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="toast-body">
-                            <div class="mb-2">
-                                You are about to remove this todo item. <br>
-                                Do you wish to continue? 
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <span>
-                                    <button type="button" data-dismiss="toast" class="btn btn-sm btn-secondary">No</button>
-                                    <button type="button" data-dismiss="toast" class="btn btn-sm btn-primary" @click="removeTodoItem()">Yes</button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div id="app" class="todo-card" v-cloak>
+                <div class="loading" v-if="fetching" role="status">
+                    <div class="spinner-border text-success" aria-hidden="true"></div>
+                    <span class="visually-hidden">Loading...</span>
                 </div>
-                <div class="loading" v-show="info">
-                    <div class="toast" id="alert-info" role="alert" aria-live="assertive" aria-atomic="true"  data-delay="5000">
-                        <div class="toast-header">
-                            <i class="fa fa-list-ul" aria-hidden="true"></i>
-                            <strong class="mr-auto pl-2">Todo</strong>
-                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="toast-body">
-                            {{"{{messageText}}"}}
-                        </div>
-                    </div>
-                </div>
-                <div class="loading" v-if="fetching">
-                  <div class="loader text-success" role="status"></div>
-                  <div class="loader text-primary delay-1" role="status"></div>
-                  <div class="loader text-warning delay-2" role="status"></div>
-                  <div class="loader text-danger delay-3" role="status"></div>
-                  <span class="sr-only">Loading...</span>
-                </div>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link" :class="{ active: activeTab === 1 }" @click.prevent.stop="changeTab(1)" href="#"><i class="fa fa-list-ul" aria-hidden="true"></i> Todo</a>
+
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" :class="{ active: activeTab === 'list' }" type="button" role="tab"
+                            :aria-selected="activeTab === 'list'" @click="activeTab = 'list'">
+                            <i class="bi bi-list-ul" aria-hidden="true"></i> Todo
+                            <span class="badge text-bg-secondary ms-1" v-if="todoList.length">{{ remaining }}/{{ todoList.length }}</span>
+                        </button>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" :class="{ active: activeTab === 2 }" @click.prevent.stop="changeTab(2)" href="#"><i class="fa fa-plus" aria-hidden="true"></i> New</a>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" :class="{ active: activeTab === 'new' }" type="button" role="tab"
+                            :aria-selected="activeTab === 'new'" @click="openNewTab">
+                            <i class="bi bi-plus-lg" aria-hidden="true"></i> New
+                        </button>
                     </li>
                 </ul>
-                <div class="my-2" v-show="activeTab === 1">
-                   <ul class="todoList">
-                    <li v-for="(item, index) in todoList" class="mb-2 noselect" :class="item.status? 'complete':'incomplete'" @dblclick="toggleStatus(item.id)">
-                        <span class="icon-left">
-                            <i v-if="item.status" class="fa fa-check-circle" aria-hidden="true"></i>
-                            <i v-else class="fa fa-circle" aria-hidden="true"></i>
-                        </span>
-                        <span class="label">{{"{{item.text}}"}}</span> <!-- Use Vue Double Mustache within quotes inside a Twig Double Mustache to avoid Tiwg considering Vue code as it's own -->
-                        <span class="actions">
-                            <a class="text-danger" type="button" @click.prevent="confirmRemove(item.id)" href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        </span>
-                    </li>
-                   </ul>
-                   <p v-if="todoList.length === 0">Please add a todo items</p>
+
+                <div class="py-3" v-show="activeTab === 'list'" role="tabpanel">
+                    <ul class="list-group">
+                        <li v-for="item in todoList" :key="item.id"
+                            class="list-group-item todo-item d-flex align-items-center gap-2"
+                            :class="item.status ? 'complete' : 'incomplete'">
+                            <input class="form-check-input flex-shrink-0 mt-0" type="checkbox" :id="'todo-' + item.id"
+                                :checked="item.status" @change="toggleStatus(item)">
+                            <label class="form-check-label flex-grow-1" :for="'todo-' + item.id">{{ item.text }}</label>
+                            <button type="button" class="btn btn-sm btn-outline-danger border-0"
+                                :aria-label="'Remove ' + item.text" @click="confirmRemove(item)">
+                                <i class="bi bi-trash" aria-hidden="true"></i>
+                            </button>
+                        </li>
+                    </ul>
+                    <p class="text-body-secondary mb-0" v-if="!fetching && todoList.length === 0">Nothing to do yet. Add a todo item from the <strong>New</strong> tab.</p>
                 </div>
-                <div class="my-2" v-show="activeTab === 2">
-                  <p>Add a Todo Item<p>
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Todo Item" aria-label="Todo Item" aria-describedby="button-addon" v-model="newItem" @keyup.enter="addTodoItem()">
-                    <div class="input-group-append">
-                        <button class="btn btn-success" type="button" id="button-addon" @click="addTodoItem()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+
+                <div class="py-3" v-show="activeTab === 'new'" role="tabpanel">
+                    <form @submit.prevent="addTodoItem">
+                        <label for="new-todo" class="form-label">Add a Todo Item</label>
+                        <div class="input-group">
+                            <input type="text" id="new-todo" ref="newTodoInput" class="form-control" placeholder="Todo item"
+                                maxlength="256" v-model="newItem">
+                            <button class="btn btn-success" type="submit" :disabled="!newItem.trim()" aria-label="Add todo item">
+                                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Remove confirmation -->
+                <div class="modal fade" ref="confirmModal" tabindex="-1" aria-labelledby="confirm-title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-6" id="confirm-title"><i class="bi bi-list-ul" aria-hidden="true"></i> Remove todo?</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                You are about to remove <strong>{{ pendingRemoval && pendingRemoval.text }}</strong>. Do you wish to continue?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-sm btn-danger" @click="removeTodoItem">Yes, remove</button>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                </div>
+
+                <!-- Messages -->
+                <div class="toast-container position-fixed top-0 end-0 p-3">
+                    <div class="toast" ref="infoToast" role="status" aria-live="polite" aria-atomic="true" data-bs-delay="4000">
+                        <div class="toast-header">
+                            <i class="bi me-2" :class="messageIsError ? 'bi-exclamation-triangle text-danger' : 'bi-check-circle text-success'" aria-hidden="true"></i>
+                            <strong class="me-auto">Todo</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">{{ messageText }}</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endverbatim %}
 {% endblock %}
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.45/dist/vue.global.prod.js" integrity="sha384-K2FjvpG1y48yCE+7CBPhnKc16ShPmT3dlNwvoA3dhjV18+L5ugI0P8PWPvdjm/Fa" crossorigin="anonymous"></script>
 <script>
-   var vm = new Vue({
-       el: '#app',
-       data: {
-            todoList:[],
-            activeTab:1,
-            newItem:'',
-            fetching:false,
-            confirm:false,
-            info:false,
-            delid:0,
-            messageText:''
-       },
-       methods:{
-           changeTab(tabId){
-               this.activeTab = tabId;
-           },
-           populateTodo(){
-               this.fetching = true;
-               fetch('/api/todos', {
-                   method:'GET'
-               })
-               .then(response => response.json())
-               .then(db => {
-                   this.todoList = db.data;
-                   this.fetching = false;
-               }).catch(error => {
-                   alert(error.message);
-                   this.fetching = false;
-               })
-           },
-           addTodoItem(){
-               if(this.newItem.length > 1){
-                this.fetching = true;
-                fetch('/api/todos', {
-                    method:'POST',headers: {
-                     'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                     'task':this.newItem
-                    })
-                })
-                .then(response => response.json())
-                .then(db => {
-                    this.newItem = '';
-                    this.activeTab = 1;
-                    this.showAlert(db.message);
-                    this.populateTodo();
-                }).catch(error => {
-                    this.showAlert(error.message);
-                    this.fetching = false;
-                })
-               }
-           },
-           confirmRemove(id){
-               this.delid = id;
-               this.confirm = true;
-               $('#alert-confirm').toast('show');
-           },
-           removeTodoItem(){
-               if(this.delid){
-                this.fetching = true;
-                fetch('/api/todos', {
-                    method:'DELETE',headers: {
-                        'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                        'taskId':this.delid
-                        })
-                })
-                .then(response => response.json())
-                .then(db => {
-                    this.showAlert(db.message);
-                    this.populateTodo();
-                }).catch(error => {
-                    this.showAlert(error.message);
-                    this.fetching = false;
-                })
-               }
-           },
-           toggleStatus(id){
-               this.fetching = true;
-               fetch('/api/todos/status', {
-                   method:'POST',headers: {
-                     'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                     'taskId':id
-                    })
-               })
-               .then(response => response.json())
-               .then(db => {
-                  this.populateTodo();
-               }).catch(error => {
-                  this.showAlert(error.message);
-                  this.fetching = false;
-               })
-           },
-           showAlert(message){
-               this.info = true;
-               this.messageText = message;
-               $('#alert-info').toast('show');
-           }
-       },
-       created: function(){
-           this.populateTodo();
-       }
-   });
-$('#alert-info').on('hidden.bs.toast', function () {
-  vm.$data.info = false;
-  vm.$data.messageText = '';
-});
-$('#alert-confirm').on('hidden.bs.toast', function () {
-  vm.$data.confirm = false;
-  vm.$data.delid = 0;
-});
+const { createApp } = Vue;
+
+/* Call the Todo API and return its JSON, throwing the API's message on an error status */
+async function api(path, method = 'GET', body = null) {
+    const response = await fetch('/api/todos' + path, {
+        method,
+        headers: body ? { 'Content-Type': 'application/json' } : {},
+        body: body ? JSON.stringify(body) : null,
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        throw new Error(data.message || `Request failed (${response.status})`);
+    }
+    return data;
+}
+
+const vm = createApp({
+    data() {
+        return {
+            todoList: [],
+            activeTab: 'list',
+            newItem: '',
+            fetching: false,
+            pendingRemoval: null,
+            messageText: '',
+            messageIsError: false,
+        };
+    },
+    computed: {
+        remaining() {
+            return this.todoList.filter(item => !item.status).length;
+        },
+    },
+    methods: {
+        async run(task) {
+            this.fetching = true;
+            try {
+                await task();
+            } catch (error) {
+                this.showMessage(error.message, true);
+            } finally {
+                this.fetching = false;
+            }
+        },
+        populateTodo() {
+            return this.run(async () => {
+                this.todoList = (await api('')).data;
+            });
+        },
+        openNewTab() {
+            this.activeTab = 'new';
+            this.$nextTick(() => this.$refs.newTodoInput.focus());
+        },
+        addTodoItem() {
+            const task = this.newItem.trim();
+            if (!task) return;
+            return this.run(async () => {
+                const result = await api('', 'POST', { task });
+                this.newItem = '';
+                this.activeTab = 'list';
+                this.showMessage(result.message);
+                this.todoList = (await api('')).data;
+            });
+        },
+        toggleStatus(item) {
+            return this.run(async () => {
+                await api('/status', 'POST', { taskId: item.id });
+                this.todoList = (await api('')).data;
+            });
+        },
+        confirmRemove(item) {
+            this.pendingRemoval = item;
+            bootstrap.Modal.getOrCreateInstance(this.$refs.confirmModal).show();
+        },
+        removeTodoItem() {
+            const item = this.pendingRemoval;
+            bootstrap.Modal.getOrCreateInstance(this.$refs.confirmModal).hide();
+            if (!item) return;
+            return this.run(async () => {
+                const result = await api('', 'DELETE', { taskId: item.id });
+                this.showMessage(result.message);
+                this.todoList = (await api('')).data;
+            });
+        },
+        showMessage(message, isError = false) {
+            this.messageText = message;
+            this.messageIsError = isError;
+            bootstrap.Toast.getOrCreateInstance(this.$refs.infoToast).show();
+        },
+    },
+    mounted() {
+        // Move focus out of the dialog before Bootstrap hides it from assistive technology
+        this.$refs.confirmModal.addEventListener('hide.bs.modal', () => {
+            if (this.$refs.confirmModal.contains(document.activeElement)) {
+                document.activeElement.blur();
+            }
+        });
+        this.$refs.confirmModal.addEventListener('hidden.bs.modal', () => {
+            this.pendingRemoval = null;
+        });
+        this.populateTodo();
+    },
+}).mount('#app');
 </script>
 {% endblock %}

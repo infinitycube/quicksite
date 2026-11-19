@@ -21,9 +21,11 @@ return function (App $app) {
         $settings['logErrorDetails']
     );
 
-    // Slim takes middlewares as Last In First Out that means
-    // The last middleware layer added is the first to be executed.
-    // This TrailingSlash middleware allows routes with traling slash
-    // /api/todos/ will be same as /api/todo
+    /** 
+     * Slim takes middlewares as Last In First Out that means
+     * The last middleware layer added is the first to be executed.
+     * This TrailingSlash middleware allows routes with traling slash
+     * /api/todos/ will be same as /api/todo 
+     */
     $app->add(new TrailingSlash($settings['trailingSlash']));
 };

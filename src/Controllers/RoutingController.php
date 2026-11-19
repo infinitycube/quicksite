@@ -26,11 +26,15 @@ class RoutingController
         $group->group('/todos', Todo\RoutesController::class . ':routes');
     }
 
-    // All Site routes should be defined here
+    /**
+     * All Site routes should be defined here
+     * You should add view middleware to routes
+     * if you need twig renderer
+     */
     public function site(Group $group)
     {
-        $group->get('/', HomeController::class . ':home');
-        $group->get('/about', HomeController::class . ':about')->add($this->container->get('sessionMiddleware'));
-        $group->get('/todo', HomeController::class . ':todo');
+        $group->get('/', HomeController::class . ':home')->add($this->container->get('viewMiddleware'));
+        $group->get('/about', HomeController::class . ':about')->add($this->container->get('sessionMiddleware'))->add($this->container->get('viewMiddleware'));
+        $group->get('/todo', HomeController::class . ':todo')->add($this->container->get('viewMiddleware'));
     }
 }
