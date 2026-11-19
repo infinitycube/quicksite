@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+
+<?php
+/**
+ * WARNING
+ * -------
+ * Do not remove or modify this file.
+ */
+require __DIR__ . '/vendor/autoload.php';
+
+$console = require __DIR__ . '/app/console.php';
+
+$console->run();

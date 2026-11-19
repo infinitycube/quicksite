@@ -8,13 +8,13 @@ QuickSite let you focus on the application and data structure. The scaffolding c
 
 For working with QuickSite scaffolding, you need the following
 
+- PHP 8.4 or newer _(not needed locally if you use Docker)_
 - Skill: Object Oriented PHP
 - Skill: Twig Templating _(if you use Twig)_
 - Skill: Doctrine ORM _(if you use Doctrine)_
 - Composer installed on your machine
 - Docker _(if you use Docker as your server stack)_
-- MySQL _(if you are not using Docker)_
-- PHP 7.2 or greater
+- MySQL 8 / MariaDB Server _(if you are not using Docker)_
 
 ### Setup Project
 
@@ -33,12 +33,18 @@ $ cd myproject
 If you are have Docker installed and running, you may start your development server immediately by running.
 
 ```bash
-$ docker-compose up
+$ docker compose up
 ```
 
+### Configuration
+
+Settings are read from environment variables, with sensible defaults in `./app/settings.php`.
+`composer create-project` copies `.env.example` to `.env` for you; edit `.env` to override any value.
+`.env` is git-ignored and is optional — never commit it.
+
 **No Docker**
-For those who don't have Docker, you must create a database and assign user access in your local mysql server. Then you need to edit the file
-`./app/settings.php` look for `db` and give values to `host` `dbname` `port` `user` and `password`
+
+For those who don't have Docker, you must create a database and assign user access in your local mysql server. Then set `DB_HOST`, `DB_NAME`, `DB_PORT`, `DB_USER` and `DB_PASSWORD` in your `.env` file (copy it from `.env.example` if it does not exist).
 
 Now you can start local server
 
@@ -53,7 +59,7 @@ To make the example todo app working you need to run the migration bundled with 
 For those who use Docker, you need to SSH into your docker container while it is running.
 
 ```bash
-$ docker exec -it quick_site bash
+$ docker compose exec site bash
 ```
 
 Those who don't use Docker can skip the above step.
@@ -65,6 +71,16 @@ $ php vendor/bin/doctrine-migrations migrations:migrate
 ```
 
 You may now view the Todo app by pointing your browser to `http://localhost:8080/todo/`
+
+### Running Tests
+
+Sample unit and feature tests live in `./tests`. They do not need a database.
+
+```bash
+$ composer test
+```
+
+With Docker: `docker compose run --rm site composer test`
 
 ### Note
 

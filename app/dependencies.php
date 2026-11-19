@@ -9,14 +9,14 @@
 declare(strict_types=1);
 
 use DI\Container;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMSetup;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
-use Doctrine\DBAL\Configuration as DoctrineConfiguration;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -42,31 +42,34 @@ return function (Container $container) {
         }
     );
 
-    // DB Connection
+    // DB Connection (lazy: no connection is opened until the first query)
     $container->set(
         Connection::class,
         function (ContainerInterface $c) use ($settings) {
-            $config = new DoctrineConfiguration();
-            $connectionParams = $settings['db'];
-            return DriverManager::getConnection($connectionParams, $config);
+            return DriverManager::getConnection($settings['db']);
         }
     );
 
-    // Doctrine EntityManager
+    // Doctrine EntityManager (entities are mapped with PHP attributes, see src/Entity)
     $container->set(
-        EntityManager::class,
+        EntityManagerInterface::class,
         function (ContainerInterface $c) use ($settings) {
-            $config = Setup::createAnnotationMetadataConfiguration($settings['doctrine']['entities'], $settings['doctrine']['isDevMode'], null, null, false);
-            $config->addEntityNamespace('', $settings['doctrine']['entityNamespace']);
-            return EntityManager::create($settings['db'], $config);
+            $config = ORMSetup::createAttributeMetadataConfiguration(
+                $settings['doctrine']['entities'],
+                $settings['doctrine']['isDevMode']
+            );
+            // PHP 8.4 native lazy objects for Doctrine proxies
+            $config->enableNativeLazyObjects(true);
+            return new EntityManager($c->get(Connection::class), $config);
         }
     );
+    $container->set(EntityManager::class, \DI\get(EntityManagerInterface::class));
 
     // PDO Connection
     $container->set(
         PDO::class,
         function (ContainerInterface $c) {
-            return $c->get(Connection::class)->getWrappedConnection();
+            return $c->get(Connection::class)->getNativeConnection();
         }
     );
 };

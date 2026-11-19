@@ -12,5 +12,9 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# Environment Variables (copy .env.example to .env)
+.env
+
 # PHP Unit Test Cache
 .phpunit.result.cache
+.phpunit.cache/

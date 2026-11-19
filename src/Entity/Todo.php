@@ -6,53 +6,45 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/** 
- * @ORM\Entity
- * @ORM\Table (name="todo")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'todo')]
 class Todo
 {
-    /** 
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    protected ?int $id = null;
 
-    /**
-     * @ORM\Column(length=256)
-     */
-    protected $task;
+    #[ORM\Column(length: 256)]
+    protected string $task = '';
 
-    /**
-     * @ORM\Column(type="boolean", name="is_complete")
-     */
-    protected $isComplete = false;
+    #[ORM\Column(name: 'is_complete', type: 'boolean')]
+    protected bool $isComplete = false;
 
     /**
      * Getters and Setters
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTask()
+    public function getTask(): string
     {
         return $this->task;
     }
 
-    public function setTask(string $task)
+    public function setTask(string $task): void
     {
         $this->task = $task;
     }
 
-    public function getStatus()
+    public function getStatus(): bool
     {
         return $this->isComplete;
     }
 
-    public function setStatus(bool $status)
+    public function setStatus(bool $status): void
     {
         $this->isComplete = $status;
     }
