@@ -3,56 +3,49 @@
 declare(strict_types=1);
 
 use DI\Container;
-use Monolog\Logger;
+use Monolog\Level;
 
 return function (Container $container) {
     // Global Settings Object
     $container->set('settings', function () {
+
+        $is_production = env('ENVIRONMENT', 'development') == 'production';
+        $view_cache = env('VIEW_CACHE', false) ? base_path(env('VIEW_CACHE', false)) : false;
         return [
-            'displayErrorDetails' => true, // Should be set to false in production
-            'logErrorDetails' => false,
-            'logErrors' => false,
-            'trailingSlash' => false,
+            'mainRoute' => env('MAIN_ROUTE', ''),
+            'apiRoute' => env('API_ROUTE', '/api'),
+            'trailingSlash' => filter_var(env('TRAILING_SLASH', false), FILTER_VALIDATE_BOOLEAN),
+            'displayErrorDetails' => $is_production ? false : true,
+            'logErrorDetails' => filter_var(env('LOG_ERRORDETAILS', false), FILTER_VALIDATE_BOOLEAN),
+            'logErrors' => filter_var(env('LOG_ERRORS', false), FILTER_VALIDATE_BOOLEAN),
             'logger' => [
-                'name' => 'slim-app',
-                'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
-                'level' => Logger::DEBUG,
+                'name' => env('LOGGER_NAME', 'quick-site'),
+                'path' => isset($_ENV['docker']) ? 'php://stdout' : base_path(env('LOGGER_PATH', 'logs/app.log')),
+                'level' => Level::Debug,
             ],
             'views' => [
-                'path' => __DIR__ . '/../src/Views',
-                'settings' => ['cache' => false],
+                'path' => base_path(env('VIEWS_PATH', 'src/Views')),
+                'settings' => ['cache' => $view_cache],
             ],
             'session' => [
-                'name' => 'slim_session',
-                'autorefresh' => true,
-                'lifetime' => '30 minutes'
+                'name' => env('SESSION_NAME', 'quicksite_session'),
+                'autorefresh' => filter_var(env('SESSION_AUTO_REFRESH', true), FILTER_VALIDATE_BOOLEAN),
+                'lifetime' => env('SESSION_LIFE', '30 minutes')
             ],
             'db' => [
-                'driver' => 'pdo_mysql',
-                'host' => 'dbserver', // Use 127.0.0.1 in case you use without docker
-                'dbname' => 'quick_site',
-                'port' => 3306,
-                'user' => 'user',
-                'password' => 'secret',
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-                'driverOptions' => [
-                    // Turn off persistent connections
-                    PDO::ATTR_PERSISTENT => false,
-                    // Enable exceptions
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    // Emulate prepared statements
-                    PDO::ATTR_EMULATE_PREPARES => true,
-                    // Set default fetch mode to array
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    // Set character set
-                    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
-                ],
+                'driver' => env('DB_DRIVER', 'pdo_mysql'),
+                'host' => env('DB_HOST', 'db'),
+                'dbname' => env('DB_NAME', 'quick_site'),
+                'port' => (int) env('DB_PORT', 3306),
+                'user' => env('DB_USER', 'user'),
+                'password' => env('DB_PASSWORD', 'secret'),
+                'charset' => env('DB_CHARSET', 'utf8mb4'),
+                'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
             ],
             'doctrine' => [
-                'entities' => [__DIR__ . '/../src/Entity'],
-                'entityNamespace' => 'App\Entity',
-                'isDevMode' => true, // Should be set to false in production
+                'entities' => [base_path(env('DOCTRINE_ENTITY_DIRECTORY', 'src/Entity'))],
+                'entityNamespace' => env('DOCTRINE_ENTITY_NAMESPACE', 'App\Entity'),
+                'isDevMode' => $is_production ? false : true,
             ]
         ];
     });
